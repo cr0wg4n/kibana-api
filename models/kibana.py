@@ -16,7 +16,6 @@ class Kibana:
         for arg in args:
             if arg:
                 url = urljoin(url, arg + "/")
-
         return  url[:-1] if url[-1:]=="/" else url
 
     def requester(self, **kwargs): 
@@ -34,4 +33,3 @@ class Kibana:
 
     def object(self, **kwargs): 
         return Object(kibana=self, **kwargs)
-

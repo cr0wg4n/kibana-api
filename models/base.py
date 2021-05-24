@@ -1,12 +1,9 @@
 from multipledispatch import dispatch
 import json
 
-class BaseModel:
-    def __init__(self, attributes, space_id=None, kibana=None, _json=None) -> None:
+class Utils:
+    def __init__(self, attributes) -> None:
         self.attributes = attributes
-        self.space_id = "" if not space_id else f's/{space_id}'
-        self.kibana = kibana
-        self._json = _json
 
     def deserialize(self, _json):
         data = json.loads(_json)
@@ -30,9 +27,16 @@ class BaseModel:
         if object.get(attribute):
             setattr(target_object, attribute, object[attribute])
             return target_object
-
+            
     def validate_type(self, value, types):
         return value in types
+
+class BaseModel(Utils):
+    def __init__(self, attributes, space_id=None, kibana=None, _json=None) -> None:
+        super().__init__(attributes)
+        self.space_id = "" if not space_id else f's/{space_id}'
+        self.kibana = kibana
+        self._json = _json
 
     def requester(self, **kwargs):
         return self.kibana.requester(**kwargs)
