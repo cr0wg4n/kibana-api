@@ -1,7 +1,7 @@
 import json
 import secrets
 import os
-from .base import BaseModel, Utils
+from .base import BaseModel
 
 class Space(BaseModel):
     def __init__(self, id=None, name=None, description=None, color=None, initials=None, disabledFeatures=None, _reserved=None, kibana=None) -> None:
@@ -182,25 +182,7 @@ class Visualization():
 
 
 
+# class TooLargePanel(Exception):
+#     def __init__(self, *args: object) -> None:
+#         super().__init__(*args)
 
-
-
-class TooLargePanel(Exception):
-    def __init__(self, *args: object) -> None:
-        super().__init__(*args)
-
-[
-  {
-    "version": "7.8.0",
-    "gridData": {
-      "x": 0,
-      "y": 0,
-      "w": 24,
-      "h": 15,
-      "i": "6e1d76ef-52b9-4206-ad80-0c5fb1e746c7"
-    },
-    "panelIndex": "6e1d76ef-52b9-4206-ad80-0c5fb1e746c7",
-    "embeddableConfig": {},
-    "panelRefName": "panel_0"
-  }
-]

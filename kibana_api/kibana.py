@@ -1,6 +1,6 @@
 import requests
 from urllib.parse import urljoin
-from .objects import *
+from .objects import Space, Object
 
 spaces = "http://localhost:5601/api/spaces/space"
 host = 'http://localhost:5601/s/demo/api/saved_objects/index-pattern'
