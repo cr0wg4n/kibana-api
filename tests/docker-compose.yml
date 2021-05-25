@@ -1,61 +1,3 @@
-# Kibana API Mapping Library
-
-## Development Requirements
-I only use `requests` to perform HTTP requests and pure logic for 
-all behaviour.
-## Installation
-
-```bash
-pip install kibana-api
-```
-## Usage and Examples
-
-Configure Kibana Object:
-```python
-URL = "http://localhost:5601"
-USERNAME = "XXXX"
-PASSWORD = "XXXX"
-
-```
-
-### Create Space
-```python
-```
-out:
-```bash
-```
-
-### Create Object (index-pattern)
-
-```python
-```
-out:
-```bash
-```
-### Create Object (visualization)
-```python
-```
-out:
-```bash
-```
-### Create Object (dashboard)
-```python
-```
-out:
-```bash
-```
-### List all objects
-```python
-```
-out:
-```bash
-```
-## Development
-
-Before starting you should run the `docker-compose.yml` file at `tests` folder (for 
-testing purposes):
-
-```docker
 version: '2.2'
 services:
   es01:
@@ -139,13 +81,3 @@ volumes:
 networks:
   elastic:
     driver: bridge
-```
-
-Once the container is up you can run the tests:
-
-```bash
-python -m unittest tests.tests 
-```
-
-## Contributing
-Yes fella, you know how ;)

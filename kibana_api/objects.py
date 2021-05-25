@@ -136,12 +136,17 @@ class Dashboard():
         return json.dumps(data)
     
 class Visualization():
-    def __init__(self, type, title, index_pattern_id, query="") -> None:
+    
+    def __init__(self, type, title, index_pattern_id, query="", mappings_filepath=None) -> None:
+        CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+        MAPPINGS_DIR = os.path.join(CURRENT_DIR, 'mappings')
+        print("mapping_dir", MAPPINGS_DIR)
         self.primitive_type="visualization"
         self.type= type
         self.title = title
         self.index_pattern_id = index_pattern_id
         self.query = query
+        self.mappings_file_path = os.path.join(MAPPINGS_DIR, "{}.json".format(self.type)) if not mappings_filepath else mappings_filepath
 
     def create(self):
         return {
@@ -163,7 +168,7 @@ class Visualization():
         }
 
     def __templater(self, title):
-        file = open("{}.json".format(os.path.join("./mappings", self.type)), 'r')
+        file = open(self.mappings_file_path, 'r')
         data = json.load(file)
         data["title"] = title
         file.close()

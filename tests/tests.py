@@ -1,6 +1,7 @@
 from kibana_api import Dashboard, Panel, Visualization, Kibana
 import random
 import unittest
+import os
 
 
 URL = "http://localhost:5601"
@@ -45,7 +46,9 @@ class TestStringMethods(unittest.TestCase):
 
     def test_import(self):
         pass
-        file = open('data/example_no_subdata.ndjson', 'r')
+        CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+        FILE_PATH = os.path.join(CURRENT_DIR, 'exported_data.ndjson')
+        file = open(FILE_PATH, 'r')
         response = Kibana(base_url=URL).object().loads(file=file)
         file.close()
         print(response.json())
@@ -73,7 +76,7 @@ class TestStringMethods(unittest.TestCase):
         res = kibana.object(space_id="demo", attribs=pattern_json).create('index-pattern').json()
         index_pattern = res["id"]
         type = "histogram"
-        title = "hello this is a visualization :D"
+        title = "hello this is a visualization :D 2"
         visualization = Visualization(type=type, title=title, index_pattern_id=index_pattern).create()
         res = kibana.object(space_id="demo").create('visualization', body=visualization).json()
         print(res)
@@ -81,7 +84,7 @@ class TestStringMethods(unittest.TestCase):
     def test_create_dashboard(self):
         pass
         pattern_json = {
-            "title":"demo*",
+            "title":"de*",
             "timeFieldName": "@timestamp",
             "fields":"[]"
         }
@@ -89,7 +92,7 @@ class TestStringMethods(unittest.TestCase):
         res = kibana.object(space_id="demo", attribs=pattern_json).create('index-pattern').json()
         index_pattern = res["id"]
         type = "histogram"
-        title = "hello this is a visualization :D"
+        title = "hello this is a visualization :D 3"
         visualization = Visualization(type=type, title=title, index_pattern_id=index_pattern).create()
         res = kibana.object(space_id="demo").create('visualization', body=visualization).json()
         visualization_id = res["id"]
@@ -100,7 +103,6 @@ class TestStringMethods(unittest.TestCase):
         dasboard = Dashboard(title="hola mundo", panels=panels, references=references, query="user.name: mat*").create()
         res = kibana.object(space_id="demo").create('dashboard', body=dasboard).json()
         print(res)
-
 
 if __name__ == "__main__":
     unittest.main()
