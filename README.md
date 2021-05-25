@@ -20,42 +20,53 @@ PASSWORD = "XXXX"
 
 ### Create Space
 ```python
+""
 ```
 out:
 ```bash
+""
 ```
 
 ### Create Object (index-pattern)
-
 ```python
+""
 ```
 out:
 ```bash
+""
 ```
+
 ### Create Object (visualization)
 ```python
+""
 ```
 out:
 ```bash
+""
 ```
 ### Create Object (dashboard)
 ```python
+""
 ```
 out:
 ```bash
+""
 ```
 ### List all objects
 ```python
+""
 ```
 out:
 ```bash
+""
 ```
+
 ## Development
 
 Before starting you should run the `docker-compose.yml` file at `tests` folder (for 
 testing purposes):
 
-```docker
+```yaml
 version: '2.2'
 services:
   es01:
@@ -141,7 +152,7 @@ networks:
     driver: bridge
 ```
 
-Once the container is up you can run the tests:
+Once the container is up you can validate every unit test:
 
 ```bash
 python -m unittest tests.tests 
