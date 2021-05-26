@@ -1,7 +1,7 @@
 import json
 import secrets
 import os
-from .base import BaseModel
+from .base import BaseModel, Utils
 
 class Space(BaseModel):
     def __init__(self, id=None, name=None, description=None, color=None, initials=None, disabledFeatures=None, _reserved=None, kibana=None) -> None:
@@ -135,49 +135,71 @@ class Dashboard():
         }
         return json.dumps(data)
     
-class Visualization():
+class Visualization(Utils):
     
-    def __init__(self, type, title, index_pattern_id, query="", mappings_filepath=None) -> None:
+    def __init__(self, index_pattern_id:str, title:str="", query:str="", mappings_dir_path:str=None, type:str=None) -> None:
         CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
-        MAPPINGS_DIR = os.path.join(CURRENT_DIR, 'mappings')
-        print("mapping_dir", MAPPINGS_DIR)
         self.primitive_type="visualization"
-        self.type= type
+        self.types=["area", "heatmap", "line", "metric", "pie", "table", "tagcloud"]
+        self.type= type.lower()
         self.title = title
         self.index_pattern_id = index_pattern_id
         self.query = query
-        self.mappings_file_path = os.path.join(MAPPINGS_DIR, "{}.json".format(self.type)) if not mappings_filepath else mappings_filepath
+        self.mappings_dir_path = os.path.join(CURRENT_DIR, 'mappings') if not mappings_dir_path else mappings_dir_path
+        self.data = self.load_visualizations()
 
-    def create(self):
+    def load_visualizations(self):
+        data = {}
+        for type in self.types:
+            file_path =  os.path.join(self.mappings_dir_path, "{}.json".format(type))
+            data[type] = self.__read_json_file(file_path)
+        return data
+
+    def create(self, index_pattern_id:str=None, title:str="", body={}, query:str="") :
+        title = self.title if not title else title
+        visualization_state = self.__templater(title) if not body else self.__templater_json(title, body) 
+        search_state = self.__querier(self.query if not query else query)
+        index_pattern_id = self.index_pattern_id if not index_pattern_id else index_pattern_id
+        print(visualization_state)
         return {
             "attributes": {
-                "title": self.title,
-                "visState": self.__templater(self.title),
+                "title": title,
+                "visState": visualization_state,
                 "uiStateJSON": "{}",
                 "description": "",
                 "version": 1,
                 "kibanaSavedObjectMeta": {
-                    "searchSourceJSON": self.__querier()
+                    "searchSourceJSON": search_state
                 }
             },
             "references": [{
                 "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
                 "type": "index-pattern",
-                "id": self.index_pattern_id
+                "id": index_pattern_id
             }]
         }
 
-    def __templater(self, title):
-        file = open(self.mappings_file_path, 'r')
-        data = json.load(file)
-        data["title"] = title
+    def __read_json_file(self, file_path):
+        file = open(file_path, 'r')
+        read = file.read()
         file.close()
+        return json.loads(read)
+
+    def __templater_json(self, title, _json) -> str:
+        data = _json
+        data["title"] = title
         return json.dumps(data)
 
-    def __querier(self):
+    def __templater(self, title) -> str:
+        if self.validate_type(self.type, self.types):
+            data = self.data[self.type]
+            data["title"] = title
+            return json.dumps(data)
+
+    def __querier(self, query=None) -> str:
         data = {
             "query": {
-                "query": self.query,
+                "query": query,
                 "language": "kuery"
             },
             "indexRefName": "kibanaSavedObjectMeta.searchSourceJSON.index",

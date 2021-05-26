@@ -68,88 +68,57 @@ testing purposes):
 
 ```yaml
 version: '2.2'
+
 services:
-  es01:
+  elastic:
+    hostname: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
-    container_name: es01
+    container_name: elastic
     environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.audit.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - data01:/usr/share/elasticsearch/data
+      - elastic_volume:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - elastic
 
-  es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
-    container_name: es02
-    environment:
-      - node.name=es02
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - data02:/usr/share/elasticsearch/data
-    networks:
-      - elastic
-
-  es03:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION}
-    container_name: es03
-    environment:
-      - node.name=es03
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - data03:/usr/share/elasticsearch/data
-    networks:
-      - elastic
-
-  kib01:
+  kibana:
     image: docker.elastic.co/kibana/kibana:${VERSION}
-    container_name: kib01
+    container_name: kibana
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_URL: http://es01:9200
-      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: ${ELASTIC_USERNAME}
+      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD}
+      ADMIN_PRIVILEGES: "true"
     networks:
       - elastic
 
 volumes:
-  data01:
-    driver: local
-  data02:
-    driver: local
-  data03:
+  elastic_volume:
     driver: local
 
 networks:
   elastic:
     driver: bridge
+```
+
+The `.env` file cointains: 
+
+```bash
+VERSION=7.8.0
+ELASTIC_USERNAME=elastic
+ELASTIC_PASSWORD=elastic
 ```
 
 Once the container is up you can validate every unit test:
