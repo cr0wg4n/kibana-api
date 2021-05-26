@@ -16,49 +16,89 @@ URL = "http://localhost:5601"
 USERNAME = "XXXX"
 PASSWORD = "XXXX"
 
+kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
 ```
 
 ### Create Space
 ```python
-""
+id = "demo"
+name = "demo"
+description = "descripcion del espacio de pruebas"
+color = "#000000"
+space = kibana.space(id=id, name=name, description=description, color=color)
+space_response = space.create()
 ```
-out:
-```bash
-""
-```
-
 ### Create Object (index-pattern)
 ```python
-""
-```
-out:
-```bash
-""
+pattern_json = {
+    "title":"demo*",
+    "timeFieldName": "@timestamp", #timefiledname is important, it taken as a reference to time
+    "fields":"[]"
+}
+kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
+index_pattern_response = kibana.object(space_id="demo").create('index-pattern', attribs=pattern_json)
 ```
 
 ### Create Object (visualization)
 ```python
-""
+type = "metric"
+title = "Hello this is a basic metric visualization"
+index_pattern_id = "XXXX-XXX-XXXX" # every visualization needs an index pattern to work
+visualization = Visualization(type=type, title=title, index_pattern_id=index_pattern).create()
+visualization_response = kibana.object(space_id="demo").create('visualization', body=visualization).json()
 ```
-out:
-```bash
-""
+### Visualization Modelation
+```python
+index_pattern = "XXXXX-XXXXXX-XXXXXX"
+type = "line"
+title = "Hello this is a basic line visualization"
+visualization = Visualization(type=type, title=title, index_pattern_id=index_pattern)
+visulization_json = visualization.create()
 ```
+
+### Panel Modelation
+```python
+width=48 
+height=12
+pos_x=0
+pos_y=1
+panel = Panel("panel_0", width, height, pos_x, pos_y, visualization_id=visualization_id)
+panel_json = panel.create()
+references = panel.get_references()
+```
+
 ### Create Object (dashboard)
 ```python
-""
+index_pattern = "XXXXX-XXXXXX-XXXXXX"
+type = "line"
+title = "Hello this is a basic line visualization"
+visualization = Visualization(type=type, title=title, index_pattern_id=index_pattern).create()
+visualization_response = kibana.object(space_id="demo").create('visualization', body=visualization).json()
+visualization_id = visualization_response["id"]
+panel = Panel("panel_0", 48, 12, 0, 2, visualization_id=visualization_id)
+panels = [panel.create()]
+references = [panel.get_reference()]
+dashboard = Dashboard(title="Demo Dashboard", panels=panels, references=references)
+dashboard_response = dashboard.create()
 ```
-out:
-```bash
-""
-```
+
 ### List all objects
 ```python
-""
+objects_response = kibana.object(space_id="demo").all() # All objects
+print(objects_response.json())
+# Filter by types: "visualization", "dashboard", "search", "index-pattern", 
+# "config", "timelion-sheet", "url", "query", "canvas-element", "canvas-workpad", "lens",
+# "infrastructure-ui-source", "metrics-explorer-view", "inventory-view"
+objects_response = kibana.object(space_id="demo").all(type="index-pattern") # Type in specific 
+print(objects_response.json())
+
 ```
-out:
-```bash
-""
+
+### Import Objects
+```python
+file = open("demo.ndjson", 'r')
+response = kibana.object().loads(file=file)
+file.close()
 ```
 
 ## Development
