@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as description:
 
 setuptools.setup(
     name="kibana-api",
-    version="0.0.1",
+    version="0.0.2",
     author="Mauricio Matias Conde",
     author_email="mcm.crw@gmail.com",
     description="This is an API mapping library for Kibana API to generate visualizations and dashboards automatically",

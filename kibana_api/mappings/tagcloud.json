@@ -1,0 +1,20 @@
+{
+  "type": "tagcloud",
+  "aggs": [
+    {
+      "id": "1",
+      "enabled": true,
+      "type": "count",
+      "schema": "metric",
+      "params": {}
+    }
+  ],
+  "params": {
+    "scale": "linear",
+    "orientation": "single",
+    "minFontSize": 18,
+    "maxFontSize": 72,
+    "showLabel": true
+  },
+  "title": "tagcloud"
+}

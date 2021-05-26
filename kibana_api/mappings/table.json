@@ -1,0 +1,25 @@
+{
+  "type": "table",
+  "aggs": [
+    {
+      "id": "1",
+      "enabled": true,
+      "type": "count",
+      "schema": "metric",
+      "params": {}
+    }
+  ],
+  "params": {
+    "perPage": 10,
+    "showPartialRows": false,
+    "showMetricsAtAllLevels": false,
+    "sort": {
+      "columnIndex": null,
+      "direction": null
+    },
+    "showTotal": false,
+    "totalFunc": "sum",
+    "percentageCol": ""
+  },
+  "title": "table"
+}

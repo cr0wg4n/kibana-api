@@ -1,5 +1,5 @@
 {
-  "type": "histogram",
+  "type": "line",
   "aggs": [
     {
       "id": "1",
@@ -7,29 +7,10 @@
       "type": "count",
       "schema": "metric",
       "params": {}
-    },
-    {
-      "id": "2",
-      "enabled": true,
-      "type": "date_histogram",
-      "schema": "segment",
-      "params": {
-        "field": "@timestamp",
-        "timeRange": {
-          "from": "now-1h",
-          "to": "now"
-        },
-        "useNormalizedEsInterval": true,
-        "scaleMetricValues": false,
-        "interval": "auto",
-        "drop_partials": false,
-        "min_doc_count": 1,
-        "extended_bounds": {}
-      }
     }
   ],
   "params": {
-    "type": "area",
+    "type": "line",
     "grid": {
       "categoryLines": false
     },
@@ -77,17 +58,17 @@
     "seriesParams": [
       {
         "show": true,
-        "type": "histogram",
+        "type": "line",
         "mode": "normal",
         "data": {
           "label": "Count",
           "id": "1"
         },
+        "valueAxis": "ValueAxis-1",
         "drawLinesBetweenPoints": true,
         "lineWidth": 2,
-        "showCircles": true,
         "interpolate": "linear",
-        "valueAxis": "ValueAxis-1"
+        "showCircles": true
       }
     ],
     "addTooltip": true,
@@ -95,14 +76,14 @@
     "legendPosition": "right",
     "times": [],
     "addTimeMarker": false,
+    "labels": {},
     "thresholdLine": {
       "show": false,
       "value": 10,
       "width": 1,
       "style": "full",
       "color": "#E7664C"
-    },
-    "labels": {}
+    }
   },
-  "title": ""
+  "title": "line"
 }
