@@ -22,7 +22,7 @@ class Space(BaseModel):
         return response
 
 class Object(BaseModel):
-    def __init__(self, space_id=None, kibana=None, attribs={}, type=None, references={}) -> None:
+    def __init__(self, space_id=None, kibana=None, attribs={}, type="", references={}) -> None:
         super().__init__([], space_id=space_id, kibana=kibana)
         self.types =["visualization", "dashboard", "search", "index-pattern", 
         "config", "timelion-sheet", "url", "query", "canvas-element", "canvas-workpad", "lens",
@@ -30,19 +30,27 @@ class Object(BaseModel):
         self.create_url = "api/saved_objects"
         self.import_url = "api/saved_objects/_import"
         self.all_url = "api/saved_objects/_find"
+        self.get_url = "api/saved_objects"
         self.attribs = attribs
         self.references = references
-        self.type = type
+        self.type = type.lower()
 
-    def all(self, type=None):
+    def get(self, id, type=""):
+        type = self.type if not type else type.lower()
+        if not self.validate_type(type, types=self.types):
+            return None
+        url = self.url(self.get_url, type, id)
+        return self.requester(url=url, method="get")
+
+    def all(self, type=""):
         params = {
             "type": self.types if not type else type
         }
         url = self.url(self.all_url)
         return self.requester(url=url, method="get", params=params)
 
-    def create(self, type=None, attribs={}, references={}, body={}):
-        type = (self.type.lower() if self.type else type.lower())
+    def create(self, type="", attribs={}, references={}, body={}):
+        type = (self.type if not type else type.lower())
         attribs = (self.attribs if not attribs else attribs)
         references = (self.references if not references else references)
         if not self.validate_type(type, types=self.types):
@@ -137,7 +145,7 @@ class Dashboard():
     
 class Visualization(Utils):
     
-    def __init__(self, index_pattern_id:str, title:str="", query:str="", mappings_dir_path:str=None, type:str=None) -> None:
+    def __init__(self, index_pattern_id:str, title:str="", query:str="", mappings_dir_path:str=None, type:str="") -> None:
         CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
         self.primitive_type="visualization"
         self.types=["area", "heatmap", "line", "metric", "pie", "table", "tagcloud"]
@@ -160,7 +168,6 @@ class Visualization(Utils):
         visualization_state = self.__templater(title) if not body else self.__templater_json(title, body) 
         search_state = self.__querier(self.query if not query else query)
         index_pattern_id = self.index_pattern_id if not index_pattern_id else index_pattern_id
-        print(visualization_state)
         return {
             "attributes": {
                 "title": title,

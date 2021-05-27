@@ -2,20 +2,20 @@ import requests
 from urllib.parse import urljoin
 from .objects import Space, Object
 
-spaces = "http://localhost:5601/api/spaces/space"
-host = 'http://localhost:5601/s/demo/api/saved_objects/index-pattern'
-
 class Kibana:
     def __init__(self, base_url, username=None, password=None) -> None:
         self.base_url = base_url
         self.username = username
         self.password = password
 
+    def ping(self):
+        status_code = self.requester(method="get", url=self.base_url).status_code
+        return True if status_code == 200 else False
+        
     def url(self, *args) -> str:
         url = self.base_url
         for arg in args:
-            if arg:
-                url = urljoin(url, arg + "/")
+            url = urljoin(url, arg)+ "/"
         return  url[:-1] if url[-1:]=="/" else url
 
     def requester(self, **kwargs): 

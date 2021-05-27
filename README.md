@@ -1,5 +1,10 @@
 # Kibana API Mapping Library
 
+
+[![Supported Versions](https://img.shields.io/pypi/pyversions/kibana-api.svg)](https://pypi.org/project/kibana-api/)
+[![Downloads](https://pepy.tech/badge/kibana-api/month)](https://pepy.tech/project/kibana-api/month)
+
+
 ## Development Requirements
 I only use `requests` to perform HTTP requests and pure logic for 
 all behaviour.
@@ -169,3 +174,9 @@ python -m unittest tests.tests
 
 ## Contributing
 Yes fella, you know how ;)
+
+## Contact Me
+
+My blog: [cr0wg4n](https://cr0wg4n.medium.com/)
+Twitter: [cr0wg4n](https://twitter.com/cr0wg4n)
+Linkedin: [cr0wg4n](https://www.linkedin.com/in/cr0wg4n/)
