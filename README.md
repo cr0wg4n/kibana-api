@@ -9,6 +9,7 @@
 I only use `requests` to perform HTTP requests and pure logic for 
 all behaviour.
 ## Installation
+You can find this package in https://pypi.org/project/kibana-api/
 
 ```bash
 pip install kibana-api
