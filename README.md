@@ -1,5 +1,10 @@
 # Kibana API Mapping Library
 
+
+[![Supported Versions](https://img.shields.io/pypi/pyversions/kibana-api.svg)](https://pypi.org/project/kibana-api/)
+[![Downloads](https://pepy.tech/badge/kibana-api/month)](https://pepy.tech/project/kibana-api/month)
+
+
 ## Development Requirements
 I only use `requests` to perform HTTP requests and pure logic for 
 all behaviour.
@@ -9,13 +14,14 @@ all behaviour.
 pip install kibana-api
 ```
 ## Usage and Examples
+If you going to test every example, you shold run the `docker-compose.yml` example(development section).
 
-Configure Kibana Object:
+### Configure Kibana Object:
 ```python
 URL = "http://localhost:5601"
-USERNAME = "XXXX"
+USERNAME = "XXXX" 
 PASSWORD = "XXXX"
-
+# username and password are optional fields
 kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
 ```
 
@@ -169,3 +175,11 @@ python -m unittest tests.tests
 
 ## Contributing
 Yes fella, you know how ;)
+
+## Contact Me
+
+My blog: [cr0wg4n](https://cr0wg4n.medium.com/)
+
+Twitter: [cr0wg4n](https://twitter.com/cr0wg4n)
+
+Linkedin: [cr0wg4n](https://www.linkedin.com/in/cr0wg4n/)
