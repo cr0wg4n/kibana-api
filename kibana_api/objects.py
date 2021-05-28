@@ -7,6 +7,7 @@ class Space(BaseModel):
     def __init__(self, id=None, name=None, description=None, color=None, initials=None, disabledFeatures=None, _reserved=None, kibana=None) -> None:
         super().__init__(["id", "name","description", "color", "initials", "disabledFeatures", "_reserved"], kibana=kibana)
         self.create_url = "api/spaces/space"
+        self.all_url = self.create_url
         self.id = id
         self.name = name
         self.description = description
@@ -21,6 +22,11 @@ class Space(BaseModel):
         response = self.requester(url=url, method="post", data=data)
         return response
 
+    def all(self):
+        url = self.url(self.create_url)
+        response = self.requester(url=url, method="get")
+        return response
+        
 class Object(BaseModel):
     def __init__(self, space_id=None, kibana=None, attribs={}, type="", references={}) -> None:
         super().__init__([], space_id=space_id, kibana=kibana)
