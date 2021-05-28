@@ -117,9 +117,9 @@ class TestStringMethods(unittest.TestCase):
         panel = Panel("panel_0", 48, 12, 0, 2, visualization_id=mock.visualization_id)
         panels = [panel.create()]
         references = [panel.get_reference()]
-        dasboard = Dashboard(title="hola mundo", panels=panels, references=references, query="user.name: mat*").create()
+        dashboard = Dashboard(title="hola mundo", panels=panels, references=references, query="user.name: mat*").create()
         kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
-        response = kibana.object(space_id=mock.space_id).create('dashboard', body=dasboard).json()
+        response = kibana.object(space_id=mock.space_id).create('dashboard', body=dashboard).json()
         dashboard_id = response["id"]
         print("dashboard created: ", dashboard_id)
 
@@ -128,6 +128,11 @@ class TestStringMethods(unittest.TestCase):
         kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
         reponse = kibana.object(space_id=mock.space_id).get(id=mock.visualization_id, type="visualization")
         print(reponse)
+
+    def test9_get_all_spaces(self):
+        kibana = Kibana(base_url=URL, username=USERNAME, password=PASSWORD)
+        response = kibana.space().all().json()
+        print(response)
 
 if __name__ == "__main__":
     unittest.main()
