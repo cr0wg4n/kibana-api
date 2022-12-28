@@ -70,6 +70,38 @@ class Object(BaseModel):
         data = data if not body else body
         response = self.requester(url=url, method="post", data=json.dumps(data))
         return response
+<<<<<<< HEAD
+=======
+   
+    def update(self, id="",type="",attribs={}, references={}, body={}):      
+        "update the JSON of a saved object on kibana"  
+        type = (self.type if not type else type.lower())    
+        attribs = (self.attribs if not attribs else attribs)
+        references = (self.references if not references else references)
+        if not self.validate_type(type, types=self.types):
+            return None
+        id = (self.id if not id else id.lower())    
+        url = self.url(self.create_url, type, id)
+        data = {}
+        if attribs:
+            data["attributes"] = attribs
+        if references:
+            data["references"] = references
+        data = data if not body else body
+        response = self.requester(url=url, method="put", data=json.dumps(data))
+        return response
+    
+    def delete(self, id="",type=""):        
+        type = (self.type if not type else type.lower())    
+
+        if not self.validate_type(type, types=self.types):
+            return None
+        id = (self.id if not id else id.lower())    
+        url = self.url(self.create_url, type, id)
+
+        response = self.requester(url=url, method="delete")
+        return response
+>>>>>>> origin/dev
 
     def loads(self, file):
         url = self.url(self.import_url)
