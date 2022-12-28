@@ -70,8 +70,6 @@ class Object(BaseModel):
         data = data if not body else body
         response = self.requester(url=url, method="post", data=json.dumps(data))
         return response
-<<<<<<< HEAD
-=======
    
     def update(self, id="",type="",attribs={}, references={}, body={}):      
         "update the JSON of a saved object on kibana"  
@@ -101,7 +99,6 @@ class Object(BaseModel):
 
         response = self.requester(url=url, method="delete")
         return response
->>>>>>> origin/dev
 
     def loads(self, file):
         url = self.url(self.import_url)
