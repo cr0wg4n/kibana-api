@@ -1,6 +1,6 @@
 # Kibana API Mapping Library
 
-Note: This unofficial library is only a proof of concept
+> Note: This is an unofficial library (a proof of concept only)
 
 [![Supported Versions](https://img.shields.io/pypi/pyversions/kibana-api.svg)](https://pypi.org/project/kibana-api/)
 [![Downloads](https://pepy.tech/badge/kibana-api/month)](https://pepy.tech/project/kibana-api/month)
