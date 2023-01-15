@@ -1,4 +1,5 @@
 import json
+import math
 import secrets
 import os
 from .base import BaseModel, Utils
@@ -53,7 +54,15 @@ class Object(BaseModel):
             "type": self.types if not type else type
         }
         url = self.url(self.all_url)
-        return self.requester(url=url, method="get", params=params)
+        first_page = self.requester(url=url, method="get", params=params)
+        yield first_page
+        page_data = json.loads(first_page.text)
+        nbr_pages = math.ceil(page_data["total"] / page_data["per_page"])
+        if nbr_pages > 1:
+            for page in range(2, nbr_pages+1):
+                params["page"] = page
+                next_page = self.requester(url=url, method="get", params=params)
+                yield next_page
 
     def create(self, type="", attribs={}, references={}, body={}):
         type = (self.type if not type else type.lower())
