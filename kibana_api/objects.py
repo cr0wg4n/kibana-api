@@ -56,7 +56,7 @@ class Object(BaseModel):
         url = self.url(self.all_url)
         first_page = self.requester(url=url, method="get", params=params)
         yield first_page
-        page_data = json.loads(first_page.text)
+        page_data = first_page.json()
         nbr_pages = math.ceil(page_data["total"] / page_data["per_page"])
         if nbr_pages > 1:
             for page in range(2, nbr_pages+1):

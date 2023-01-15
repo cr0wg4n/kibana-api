@@ -109,7 +109,9 @@ objects_json = objects_response.json()
 # "config", "timelion-sheet", "url", "query", "canvas-element", "canvas-workpad", "lens",
 # "infrastructure-ui-source", "metrics-explorer-view", "inventory-view"
 objects_response = kibana.object(space_id="demo").all(type="index-pattern") # Type in specific 
-objects_json = objects_response.json()
+# objects_response will be a generator with the request response
+for response in objects_response:
+  response.json()
 ```
 
 ### List all spaces
